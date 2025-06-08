@@ -16,7 +16,7 @@ public class User {
 
     private String email;
     private String passwordHash;
-    private String name;
+    private String name;// Разбить name на ФИО
     private String role; // ADMIN, EMPLOYEE, CLIENT
 
     // Связь с корзиной (OneToOne)

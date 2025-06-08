@@ -13,7 +13,6 @@ import com.example.SecureAPI.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -28,6 +27,12 @@ public class CartService {
     public CartDTO getCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
         return convertToDTO(cart);
+    }
+
+    public List<CartDTO> getAllCarts() {
+        return cartRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     public CartDTO addToCart(Long userId, CartItemDTO request) {
@@ -63,16 +68,16 @@ public class CartService {
     }
 
     private CartDTO convertToDTO(Cart cart) {
-        CartDTO dto = new CartDTO();
-        dto.setId(cart.getId());
-        dto.setUserId(cart.getUser().getId());
-        dto.setItems(cart.getItems().stream()
-                .map(this::convertItemToDTO)
-                .toList());
-        return dto;
+        return new CartDTO(
+                cart.getId(),
+                cart.getUser().getId(),
+                cart.getItems().stream()
+                        .map(item -> new CartItemDTO(item.getProduct().getId(), item.getQuantity()))
+                        .toList());
     }
 
     private CartItemDTO convertItemToDTO(CartItem item) {
         return new CartItemDTO(item.getProduct().getId(), item.getQuantity());
     }
+
 }

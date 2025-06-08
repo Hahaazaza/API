@@ -37,4 +37,21 @@ public class ProductController {
         Product product = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
+
+    // Просто для теста
+
+    @GetMapping("/public")
+    public ResponseEntity<List<Product>> getAllProductsPublic() {
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.ok()
+                .header("Cache-Control", "no-store")
+                .header("Pragma", "no-cache")
+                .body(products);
+    }
+
+    @PostMapping("/public-add")
+    public ResponseEntity<Product> publicAddProduct(@Valid @RequestBody ProductDTO dto) {
+        Product product = productService.createProduct(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
+    }
 }

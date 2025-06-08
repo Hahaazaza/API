@@ -2,12 +2,12 @@ package com.example.SecureAPI.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class CartDTO {
+public class UserDTO {
     private Long id;
-    private Long userId;
-    private List<CartItemDTO> items;
+    private String email;
+    private String name;
+    private String role;
 }

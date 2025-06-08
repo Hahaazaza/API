@@ -73,21 +73,30 @@ public class OrderService {
         return orderRepository.findByUserId(userId);
     }
 
+    public List<OrderDTO> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
     public OrderDTO convertToDTO(Order order) {
-        OrderDTO dto = new OrderDTO();
-        dto.setId(order.getId());
-        dto.setUserId(order.getUser().getId());
-        dto.setTotalPrice(order.getTotalPrice());
-        dto.setOrderDate(order.getOrderDate());
-        dto.setItems(order.getItems().stream()
-                .map(this::convertItemToDTO)
-                .toList());
-        return dto;
+        return new OrderDTO(
+                order.getId(),
+                order.getUser().getId(),
+                order.getTotalPrice(),
+                order.getOrderDate(),
+                order.getItems().stream()
+                        .map(item -> new OrderItemDTO(
+                                item.getProduct().getId(),
+                                item.getQuantity(),
+                                item.getPriceAtTime()
+                        ))
+                        .toList()
+        );
     }
 
     private OrderItemDTO convertItemToDTO(OrderItem item) {
         return new OrderItemDTO(
-                item.getId(),
                 item.getProduct().getId(),
                 item.getQuantity(),
                 item.getPriceAtTime()

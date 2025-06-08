@@ -1,6 +1,7 @@
 package com.example.SecureAPI.controller;
 
 import com.example.SecureAPI.dto.OrderDTO;
+import com.example.SecureAPI.model.Order;
 import com.example.SecureAPI.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +31,20 @@ public class OrderController {
                 .map(orderService::convertToDTO)
                 .toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    //Просто для теста
+
+    @GetMapping("/all")
+    @PreAuthorize("permitAll")
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
+    }
+
+    @PostMapping("/public-create")
+    @PreAuthorize("permitAll")
+    public ResponseEntity<OrderDTO> publicCreateOrder() {
+        Long userId = 1L; // Можно использовать гостевого пользователя
+        return ResponseEntity.ok(orderService.createOrderFromCart(userId));
     }
 }
