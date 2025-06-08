@@ -1,5 +1,6 @@
 package com.example.SecureAPI.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,13 +13,18 @@ import lombok.Setter;
 @Table(name = "products")
 @Getter
 @Setter
+@Schema(description = "Информация о товаре")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Уникальный ID продукта", example = "1001")
     private Long id;
 
+    @Schema(description = "Название продукта", example = "Laptop")
     private String name;
+
+    @Schema(description = "Цена продукта", example = "999.99")
     private double price;
 }
 

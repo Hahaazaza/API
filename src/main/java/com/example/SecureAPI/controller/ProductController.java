@@ -3,6 +3,11 @@ package com.example.SecureAPI.controller;
 import com.example.SecureAPI.model.Product;
 import com.example.SecureAPI.dto.ProductDTO;
 import com.example.SecureAPI.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +34,14 @@ public class ProductController {
      * Получить список всех продуктов.
      * @return список продуктов
      */
+    @Operation(
+            summary = "Получить список всех продуктов",
+            description = "Возвращает список всех продуктов в системе.",
+            security = @SecurityRequirement(name = "BearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Список продуктов", content = @Content(schema = @Schema(implementation = Product.class)))
+            }
+    )
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -44,6 +57,15 @@ public class ProductController {
      * @param dto DTO нового продукта
      * @return созданный продукт и статус CREATED
      */
+    @Operation(
+            summary = "Создать новый продукт",
+            description = "Добавляет новый товар в систему.",
+            security = @SecurityRequirement(name = "BearerAuth"),
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Продукт успешно создан", content = @Content(schema = @Schema(implementation = Product.class))),
+                    @ApiResponse(responseCode = "400", description = "Некорректные данные запроса")
+            }
+    )
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDTO dto) {
@@ -55,6 +77,13 @@ public class ProductController {
      * Публичный тестовый эндпоинт для получения всех продуктов.
      * @return список всех продуктов
      */
+    @Operation(
+            summary = "Получить все продукты (публичный)",
+            description = "Тестовый эндпоинт для получения списка всех продуктов в системе.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Список продуктов", content = @Content(schema = @Schema(implementation = Product.class)))
+            }
+    )
     @GetMapping("/public")
     public ResponseEntity<List<Product>> getAllProductsPublic() {
         List<Product> products = productService.getAllProducts();
@@ -69,13 +98,20 @@ public class ProductController {
      * @param dto DTO нового продукта
      * @return созданный продукт и статус CREATED
      */
+    @Operation(
+            summary = "Добавить продукт (тестовый)",
+            description = "Тестовый эндпоинт для добавления продукта без аутентификации.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Продукт успешно создан", content = @Content(schema = @Schema(implementation = Product.class))),
+                    @ApiResponse(responseCode = "400", description = "Некорректные данные")
+            }
+    )
     @PostMapping("/public-add")
     public ResponseEntity<Product> publicAddProduct(@Valid @RequestBody ProductDTO dto) {
         Product product = productService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 }
-
 
 /**
  *             _____                                      _____

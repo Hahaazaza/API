@@ -1,5 +1,6 @@
 package com.example.SecureAPI.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -9,12 +10,15 @@ import lombok.Data;
  * Содержит название и цену продукта с валидацией.
  */
 @Data
+@Schema(description = "Данные для создания или обновления продукта")
 public class ProductDTO {
 
     @NotBlank(message = "Product name is required")
+    @Schema(description = "Название продукта", example = "Laptop")
     private String name;
 
     @Positive(message = "Price must be greater than zero")
+    @Schema(description = "Цена продукта", example = "999.99")
     private double price;
 }
 

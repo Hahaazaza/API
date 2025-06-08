@@ -1,5 +1,6 @@
 package com.example.SecureAPI.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,23 +15,28 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "cart_items")
 @Getter
 @Setter
+@Schema(description = "Элемент корзины с информацией о товаре и его количестве")
 public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID элемента корзины", example = "201")
     private Long id;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "cart_id", nullable = false)
+    @Schema(description = "Корзина, к которой относится этот элемент")
     private Cart cart;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "product_id", nullable = false)
+    @Schema(description = "Продукт, добавленный в корзину")
     private Product product;
 
     @Column(nullable = false)
+    @Schema(description = "Количество продукта в корзине", example = "2")
     private Integer quantity;
 }
 
