@@ -6,6 +6,10 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+/**
+ * Сущность элемента корзины.
+ * Представляет один товар с количеством, добавленный в корзину.
+ */
 @Entity
 @Table(name = "cart_items")
 @Getter

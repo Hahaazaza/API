@@ -6,8 +6,11 @@ import com.example.SecureAPI.model.User;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса для работы с пользователями.
+ */
 public interface UserService {
     void register(RegisterRequest request);
-    AuthResponse login(String email, String password); // Теперь возвращает AuthResponse
+    AuthResponse login(String email, String password);
     List<User> getAllUsers();
 }

@@ -18,6 +18,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Тесты для контроллера AuthController.
+ * Проверяет работу эндпоинтов /auth/register и /auth/login.
+ */
 @ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {
 
@@ -31,9 +35,14 @@ public class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
+        // Создаем MockMvc для standalone тестирования контроллера
         mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
     }
 
+    /**
+     * Тестирует POST /auth/register.
+     * Ожидается ответ 201 Created и вызов userService.register().
+     */
     @Test
     void register_ShouldReturnOk() throws Exception {
         RegisterRequest request = new RegisterRequest();
@@ -51,6 +60,10 @@ public class AuthControllerTest {
         verify(userService, times(1)).register(request);
     }
 
+    /**
+     * Тестирует POST /auth/login.
+     * Ожидается успешный ответ с JWT токеном, ролью и ID пользователя.
+     */
     @Test
     void login_ShouldReturnAuthResponse() throws Exception {
         AuthRequest request = new AuthRequest();

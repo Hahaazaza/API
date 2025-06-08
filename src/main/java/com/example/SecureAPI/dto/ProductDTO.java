@@ -4,6 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+/**
+ * DTO для создания/обновления продукта.
+ * Содержит название и цену продукта с валидацией.
+ */
 @Data
 public class ProductDTO {
 

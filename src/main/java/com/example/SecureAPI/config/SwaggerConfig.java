@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * Этот класс определяет базовую информацию об API, такую как название,
  * описание, версию, контактные данные и лицензию. Также здесь настраивается
  * механизм безопасности через JWT Bearer токены.
+ * Находится в процессе доработки
  */
 @Configuration
 @OpenAPIDefinition(

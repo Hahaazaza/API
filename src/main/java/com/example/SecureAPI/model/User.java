@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Сущность пользователя.
+ * Содержит данные о пользователе: email, хэш пароля, имя, роль (ADMIN/EMPLOYEE/CLIENT).
+ * Имеет связь с корзиной (One-to-One).
+ */
 @Entity
 @Table(name = "users")
 @Getter
@@ -16,7 +21,7 @@ public class User {
 
     private String email;
     private String passwordHash;
-    private String name;// Разбить name на ФИО
+    private String name; // Разбить name на ФИО (замечание для будущего расширения)
     private String role; // ADMIN, EMPLOYEE, CLIENT
 
     // Связь с корзиной (OneToOne)

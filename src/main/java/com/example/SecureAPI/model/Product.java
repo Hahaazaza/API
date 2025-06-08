@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Сущность продукта.
+ * Хранит информацию о товаре: название и цена.
+ */
 @Entity
 @Table(name = "products")
 @Getter

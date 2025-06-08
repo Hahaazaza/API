@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Реализация сервиса пользователей.
+ * Обрабатывает регистрацию, аутентификацию и управление пользователями.
+ */
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,6 +30,10 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
+    /**
+     * Регистрирует нового пользователя.
+     * @param request данные регистрации (email, пароль, имя, роль)
+     */
     @Override
     public void register(RegisterRequest request) {
         Objects.requireNonNull(request, "Register request cannot be null");
@@ -45,11 +53,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
+    /**
+     * Аутентифицирует пользователя и возвращает токен.
+     * @param email email пользователя
+     * @param password пароль пользователя
+     * @return DTO с JWT токеном и данными пользователя
+     */
     @Override
     public AuthResponse login(String email, String password) {
         var user = userRepository.findByEmail(email)
@@ -64,6 +73,20 @@ public class UserServiceImpl implements UserService {
         return new AuthResponse(token, user.getRole(), user.getId());
     }
 
+    /**
+     * Возвращает список всех зарегистрированных пользователей.
+     * @return список пользователей
+     */
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    /**
+     * Нормализует роль пользователя (приводит к верхнему регистру).
+     * @param role исходная роль
+     * @return нормализованная роль
+     */
     private String normalizeRole(String role) {
         if (role == null || role.isBlank()) {
             return "USER";
@@ -71,3 +94,18 @@ public class UserServiceImpl implements UserService {
         return role.toUpperCase();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// СПААААААААААААААААААААААААТь

@@ -8,6 +8,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
+/**
+ * Сущность элемента заказа.
+ * Представляет один товар в заказе с ценой на момент оформления.
+ */
 @Entity
 @Table(name = "order_items")
 @Getter

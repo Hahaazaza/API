@@ -4,10 +4,10 @@ import com.example.SecureAPI.dto.CartDTO;
 import com.example.SecureAPI.dto.OrderDTO;
 import com.example.SecureAPI.dto.OrderItemDTO;
 import com.example.SecureAPI.model.*;
-import com.example.SecureAPI.repository.CartRepository;
 import com.example.SecureAPI.repository.OrderRepository;
-import com.example.SecureAPI.repository.ProductRepository;
 import com.example.SecureAPI.repository.UserRepository;
+import com.example.SecureAPI.repository.ProductRepository;
+import com.example.SecureAPI.repository.CartRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Сервис для работы с заказами.
+ * Реализует бизнес-логику создания заказов на основе данных корзины пользователя.
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -25,6 +29,11 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository; // ✅ Добавили
 
+    /**
+     * Создаёт заказ на основе содержимого корзины пользователя.
+     * @param userId ID пользователя
+     * @return DTO созданного заказа
+     */
     @Transactional
     public OrderDTO createOrderFromCart(Long userId) {
         // Получаем корзину пользователя
@@ -69,16 +78,30 @@ public class OrderService {
         return convertToDTO(order);
     }
 
+    /**
+     * Получает все заказы пользователя по его ID.
+     * @param userId ID пользователя
+     * @return список заказов
+     */
     public List<Order> getAllOrdersByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }
 
+    /**
+     * Получает все заказы (для тестирования).
+     * @return список DTO всех заказов
+     */
     public List<OrderDTO> getAllOrders() {
         return orderRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .toList();
     }
 
+    /**
+     * Конвертирует модель заказа в DTO.
+     * @param order объект заказа
+     * @return DTO заказа
+     */
     public OrderDTO convertToDTO(Order order) {
         return new OrderDTO(
                 order.getId(),
@@ -95,6 +118,11 @@ public class OrderService {
         );
     }
 
+    /**
+     * Конвертирует элемент заказа в DTO.
+     * @param item элемент заказа
+     * @return DTO элемента заказа
+     */
     private OrderItemDTO convertItemToDTO(OrderItem item) {
         return new OrderItemDTO(
                 item.getProduct().getId(),

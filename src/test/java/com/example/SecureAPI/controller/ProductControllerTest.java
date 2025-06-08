@@ -20,6 +20,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Тесты для контроллера ProductController.
+ * Проверяет работу эндпоинтов /products (GET и POST).
+ */
 @ExtendWith(MockitoExtension.class)
 public class ProductControllerTest {
 
@@ -33,9 +37,14 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
+        // Инициализируем MockMvc для тестирования контроллера
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
     }
 
+    /**
+     * Тестирует GET /products.
+     * Ожидается список продуктов в формате JSON.
+     */
     @Test
     void getAllProducts_ShouldReturnListOfProducts() throws Exception {
         Product product1 = new Product();
@@ -62,6 +71,10 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$[1].price").value(499.99));
     }
 
+    /**
+     * Тестирует POST /products.
+     * Ожидается создание нового продукта и возврат его в ответе.
+     */
     @Test
     void createProduct_ShouldReturnCreatedProduct() throws Exception {
         ProductDTO dto = new ProductDTO();

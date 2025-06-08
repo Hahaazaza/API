@@ -1,0 +1,21 @@
+/auth/register - post
+{
+  "email": "TestimUser@example.com",
+  "password": "password123",
+  "name": "Test User",
+  "role": "CLIENT"
+}
+
+/auth/login - post
+{
+  "email": "TestimAdmin123@example.com",
+  "password": "password123"
+}
+
+/auth/users/public - get
+
+/api/cart/all - get
+
+/api/orders/all - get
+
+/products/public - get

@@ -13,43 +13,43 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.header.writers.ContentSecurityPolicyHeaderWriter;
 
 /**
- * Класс SecurityConfig содержит настройки безопасности Spring Security.
- * Здесь настраиваются:
- * - Отключение CSRF (так как используется stateless аутентификация через JWT)
- * - Stateless-сессии (без сохранения состояния на сервере)
- * - Фильтр JWT-аутентификации
- * - Политики безопасности: Content-Security-Policy, Cache-Control
- * - Разграничение доступа по ролям пользователей
+ * SecurityConfig — это основной класс конфигурации Spring Security.
+ *
+ * Он настраивает:
+ * - Отключение CSRF
+ * - Stateless сессии (без сохранения состояния на сервере)
+ * - Добавление JWT-фильтра
+ * - Политики безопасности (Content-Security-Policy, Cache-Control)
+ * - Разграничение доступа по URL и ролям
+ * - Шифрование паролей через BCrypt
  */
-@Configuration // Указывает, что в этом классе содержатся бины конфигурации
-@EnableWebSecurity // Включает поддержку веб-безопасности Spring Security
-@EnableMethodSecurity // Позволяет использовать аннотации @PreAuthorize / @PostAuthorize на уровне методов
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     /**
-     * Основная цепочка фильтров безопасности.
-     * Настройка HTTP-безопасности:
-     * - CSRF отключен, так как используется stateless аутентификация
-     * - Сессии не создаются (STATELESS)
-     * - Добавлен кастомный фильтр JwtFilter перед стандартным UsernamePasswordAuthenticationFilter
-     * - Настроены заголовки безопасности:
-     *   - Content-Security-Policy: защита от XSS
-     *   - Frame-Options: запрет отображения в iframe (защита от clickjacking)
-     *   - Cache-Control: отключён, чтобы избежать кэширования чувствительных данных
-     * - Разрешён доступ без аутентификации к эндпоинтам:
-     *   - /auth/**
-     *   - /swagger-ui/**
-     *   - /v3/api-docs/**
-     * - Все остальные запросы требуют аутентификации
-     * - Только роли ADMIN и EMPLOYEE могут работать с эндпоинтами /products/**
+     * Основной метод конфигурации цепочки фильтров безопасности.
+     *
+     * Здесь настраивается:
+     * - Отключение CSRF
+     * - Использование stateless сессий
+     * - Настройка заголовков безопасности (CSP, Frame-Options, Cache-Control)
+     * - Добавление кастомного фильтра JWT
+     * - Разрешение доступа к публичным эндпоинтам
+     * - Защита приватных эндпоинтов по ролям
+     *
+     * @param http   - объект HttpSecurity для настройки фильтров
+     * @param jwtFilter - наш кастомный фильтр для обработки JWT
+     * @return готовая цепочка фильтров
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
-                // Отключаем CSRF, так как используем stateless аутентификацию через JWT
+                // Отключаем защиту CSRF, так как мы используем stateless аутентификацию через JWT
                 .csrf(csrf -> csrf.disable())
 
-                // Используем stateless сессии — Spring не будет создавать или использовать сессию HTTP
+                // Используем stateless сессии — не храним состояние между запросами
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
@@ -62,24 +62,26 @@ public class SecurityConfig {
                         // Отключаем кэширование чувствительных данных
                         .cacheControl(cache -> cache.disable()))
 
-                // Добавляем наш кастомный фильтр JWT перед стандартным фильтром логина
+                // Добавляем наш фильтр JWT перед стандартным фильтром аутентификации
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // Настраиваем политики доступа к URL
+                // Настройка политик доступа
                 .authorizeHttpRequests(auth -> auth
-                        // Все запросы к /auth/** разрешены без аутентификации (для регистрации и логина)
+                        // Разрешаем доступ без аутентификации к эндпоинтам:
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/users/public").permitAll()
 
-                        // Только роли ADMIN и EMPLOYEE могут работать с товарами, кроме того, что находится в публичном доступе
+                        // Публичный доступ к продуктам
                         .requestMatchers("/products/public").permitAll()
                         .requestMatchers("/products/public-add").permitAll()
+
+                        // Только ADMIN и EMPLOYEE могут работать с /products/**
                         .requestMatchers("/products/**").hasAnyRole("ADMIN", "EMPLOYEE")
 
-                        // Разрешаем доступ к Swagger UI и API документации
+                        // Разрешаем Swagger UI и документацию API
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        // Публично
+                        // Публичные эндпоинты корзины и заказов
                         .requestMatchers("/api/cart/all", "/api/cart/public-add").permitAll()
                         .requestMatchers("/api/orders/all", "/api/orders/public-create").permitAll()
 
@@ -91,7 +93,11 @@ public class SecurityConfig {
 
     /**
      * Бин для шифрования паролей с использованием BCrypt.
-     * Используется при регистрации и сравнении паролей при логине.
+     *
+     * BCrypt — это алгоритм хэширования с солью, обеспечивающий высокую степень защиты.
+     * Он используется при регистрации новых пользователей и при сравнении паролей при логине.
+     *
+     * @return экземпляр BCryptPasswordEncoder
      */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

@@ -1,8 +1,12 @@
 package com.example.SecureAPI.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 
+/**
+ * DTO для передачи информации о пользователе.
+ * Содержит ID, email, имя и роль пользователя.
+ */
 @Data
 @AllArgsConstructor
 public class UserDTO {

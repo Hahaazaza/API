@@ -6,9 +6,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+/**
+ * DTO для заказа.
+ * Содержит ID заказа, ID пользователя, общую сумму, дату заказа и список товаров.
+ */
 @Data
 @AllArgsConstructor
 public class OrderDTO {

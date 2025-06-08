@@ -13,17 +13,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Реализация сервиса продуктов.
+ * Предоставляет методы для получения и добавления товаров.
+ */
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+    /**
+     * Возвращает список всех доступных продуктов.
+     * @return список продуктов
+     */
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * Создаёт новый продукт на основе DTO.
+     * @param dto данные нового продукта
+     * @return сохранённый продукт
+     */
     @Override
     public Product createProduct(ProductDTO dto) {
         Product product = new Product();

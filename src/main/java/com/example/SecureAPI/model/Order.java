@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сущность заказа.
+ * Представляет собой оформленный заказ пользователя с датой, общей суммой и списком товаров.
+ */
 @Entity
 @Table(name = "orders")
 @Getter

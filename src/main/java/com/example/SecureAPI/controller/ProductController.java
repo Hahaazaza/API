@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Контроллер для управления продуктами.
+ * Только сотрудники и администраторы могут управлять продуктами.
+ */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -21,6 +25,10 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * Получить список всех продуктов.
+     * @return список продуктов
+     */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -31,6 +39,11 @@ public class ProductController {
                 .body(products);
     }
 
+    /**
+     * Создать новый продукт.
+     * @param dto DTO нового продукта
+     * @return созданный продукт и статус CREATED
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDTO dto) {
@@ -38,8 +51,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
-    // Просто для теста
-
+    /**
+     * Публичный тестовый эндпоинт для получения всех продуктов.
+     * @return список всех продуктов
+     */
     @GetMapping("/public")
     public ResponseEntity<List<Product>> getAllProductsPublic() {
         List<Product> products = productService.getAllProducts();
@@ -49,6 +64,11 @@ public class ProductController {
                 .body(products);
     }
 
+    /**
+     * Тестовый эндпоинт для публичного добавления продукта.
+     * @param dto DTO нового продукта
+     * @return созданный продукт и статус CREATED
+     */
     @PostMapping("/public-add")
     public ResponseEntity<Product> publicAddProduct(@Valid @RequestBody ProductDTO dto) {
         Product product = productService.createProduct(dto);
