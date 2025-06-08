@@ -104,7 +104,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
+// Не ешьте меня, позязя
 /**
  *             _____                                      _____
  *           ,888888b.                                  ,888888b.
