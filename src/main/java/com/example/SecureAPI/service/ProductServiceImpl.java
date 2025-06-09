@@ -1,14 +1,11 @@
 package com.example.SecureAPI.service;
 
 import com.example.SecureAPI.dto.ProductDTO;
-import com.example.SecureAPI.exception.InvalidProductDataException;
 import com.example.SecureAPI.model.Product;
 import com.example.SecureAPI.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
